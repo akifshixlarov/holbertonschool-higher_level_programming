@@ -1,6 +1,6 @@
 #!/usr/bin/python3
-alphabet = ""
 for i in range(97, 123):
-    if chr(i) != "q" and chr(i) != "e":
-        alphabet += chr(i)
-print("{}".format(alphabet), end="")
+    if i == 101 or i == 113:
+        continue
+    else:
+        print("{}".format(chr(i)), end="")
