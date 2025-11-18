@@ -1,14 +1,10 @@
 #!/usr/bin/python3
-from sys import argv
+from calculator_1 import add, sub, mul, div
 
 if __name__ == "__main__":
-    args = argv[1:]
-    n = len(args)
-    if n == 0:
-        print("0 arguments.")
-    elif n == 1:
-        print("1 argument:")
-    else:
-        print("{} arguments:".format(n))
-    for i, a in enumerate(args, 1):
-        print("{}: {}".format(i, a))
+    a = 10
+    b = 5
+    print("{} + {} = {}".format(a, b, add(a, b)))
+    print("{} - {} = {}".format(a, b, sub(a, b)))
+    print("{} * {} = {}".format(a, b, mul(a, b)))
+    print("{} / {} = {}".format(a, b, div(a, b)))
