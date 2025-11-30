@@ -25,8 +25,11 @@ class CustomObject:
         Args:
             filename (str): File to write to
         """
-        with open(filename, "wb") as f:
-            pickle.dump(self, f)
+        try:
+            with open(filename, "wb") as f:
+                pickle.dump(self, f)
+        except Exception:
+            return None
 
     @classmethod
     def deserialize(cls, filename):
@@ -37,7 +40,12 @@ class CustomObject:
             filename (str): File to read from
 
         Returns:
-            CustomObject: Loaded object
+            CustomObject or None: Loaded object or None if error
         """
-        with open(filename, "rb") as f:
-            return pickle.load(f)
+        try:
+            with open(filename, "rb") as f:
+                return pickle.load(f)
+        except (FileNotFoundError, pickle.UnpicklingError, EOFError):
+            return None
+        except Exception:
+            return None
