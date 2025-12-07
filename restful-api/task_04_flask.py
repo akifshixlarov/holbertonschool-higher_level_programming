@@ -26,11 +26,9 @@ def status():
 def user_profile(username):
     """Return the user object for the given username"""
     profile = users.get(username)
-
     if not profile:
         return jsonify({"error": "User not found"}), 404
-    else:
-        return jsonify(profile)
+    return jsonify(profile)
 
 @app.route("/add_user", methods=["POST"])
 def add_user():
@@ -42,23 +40,21 @@ def add_user():
     if not username:
         return jsonify({"error": "Username is required"}), 400
 
-    # Username artıq mövcuddur → TEST bunu gözləyir
+    # Username artıq var → test bunu gözləyir
     if username in users:
         return jsonify({"error": "User already exists"}), 400
 
-    # Yeni user obyektini hazırla
-    user_data = {
+    # Yalnız buradan sonra yeni user obyektini yarat
+    new_user = {
         "username": username,
         "name": user_data.get("name"),
         "age": user_data.get("age"),
         "city": user_data.get("city"),
     }
 
-    # Dict-ə əlavə et
-    users[username] = user_data
+    users[username] = new_user
 
-    return jsonify({"message": "User added", "user": user_data}), 201
+    return jsonify({"message": "User added", "user": new_user}), 201
 
 if __name__ == "__main__":
     app.run(debug=True)
-"""debug=True for flask automatisation and detailed errors"""
