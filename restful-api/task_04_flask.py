@@ -1,5 +1,5 @@
 #!/usr/bin/python3
-"""A first Flask API """
+"""A first Flask API"""
 
 from flask import Flask, jsonify, request
 
@@ -7,54 +7,65 @@ app = Flask(__name__)
 
 users = {}
 
+
 @app.route("/", methods=["GET"])
 def home():
     """Return welcome message"""
     return "Welcome to the Flask API!"
 
+
 @app.route("/data", methods=["GET"])
 def get_json_data():
-    """Return a list of usernames in JSON format"""
+    """Return list of usernames"""
     return jsonify(list(users.keys()))
+
 
 @app.route("/status", methods=["GET"])
 def status():
-    """Return status message"""
+    """Return API status"""
     return "OK"
+
 
 @app.route("/users/<username>", methods=["GET"])
 def user_profile(username):
-    """Return the user object for the given username"""
+    """Return user data"""
     profile = users.get(username)
     if not profile:
         return jsonify({"error": "User not found"}), 404
     return jsonify(profile)
 
+
 @app.route("/add_user", methods=["POST"])
 def add_user():
-    """Add a new user to the dict."""
+    """Add a new user"""
     user_data = request.get_json()
+
+    # Invalid JSON
+    if not user_data:
+        return jsonify({"error": "Invalid JSON"}), 400
+
     username = user_data.get("username")
 
-    # Username yoxdur
+    # Username missing
     if not username:
         return jsonify({"error": "Username is required"}), 400
 
-    # Username artıq var → test bunu gözləyir
+    # Duplicate username
     if username in users:
-        return jsonify({"error": "User already exists"}), 400
+        return jsonify({"error": "Username already exists"}), 409
 
-    # Yalnız buradan sonra yeni user obyektini yarat
-    new_user = {
+    # Create user object
+    profile = {
         "username": username,
         "name": user_data.get("name"),
         "age": user_data.get("age"),
-        "city": user_data.get("city"),
+        "city": user_data.get("city")
     }
 
-    users[username] = new_user
+    users[username] = profile
 
-    return jsonify({"message": "User added", "user": new_user}), 201
+    return jsonify({"message": "User added", "user": profile}), 201
+
 
 if __name__ == "__main__":
     app.run(debug=True)
